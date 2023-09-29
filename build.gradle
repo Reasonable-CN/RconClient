@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.github.johnrengelman:shadow:8.1.1'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+
+group = 'cn.qfys521.xiaoming.plugin'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.projectlombok:lombok:1.18.28')
+    annotationProcessor('org.projectlombok:lombok:1.18.28')
+    implementation(fileTree(dir: 'libs' , includes: ['*.jar']))
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+java{
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+shadowJar{
+    minimize()
+}
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'cn.qfys521.xiaoming.plugin.Main',
+                'Author': 'qfys521'
+        )
+    }
+}
